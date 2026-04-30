@@ -530,7 +530,7 @@ nav {
 ════════════════════════ */
 #fold3 {
   position: relative;
-  height: 300vh;
+  height: 420vh;
   margin-top: -70vh;
   z-index: 8;
 }
@@ -1232,11 +1232,12 @@ body.preload-active {
   <div class="cases-sticky">
     <img class="mobile-case-img mobile-case-img-1 active" id="mobileCase1" src="mobile_nk.png" alt="Case 01 NK mobile"/>
     <img class="mobile-case-img mobile-case-img-2" id="mobileCase2" src="banner_kk_mobile3.png" alt="Case 02 Koffee Klup mobile"/>
+    <img class="mobile-case-img mobile-case-img-3" id="mobileCase3" src="computador_case3.png" alt="Case 03 Messano mobile"/>
 
     <div class="fold3-counter">
       <span class="current" id="caseNum">01</span>
       <span>——</span>
-      <span>02</span>
+      <span>03</span>
     </div>
     <div class="case-base">
       <div class="case-base-img">
@@ -1274,6 +1275,22 @@ body.preload-active {
         <span class="case-tag" style="border-color:rgba(10,10,10,0.3);color:rgba(10,10,10,0.6);">Produção Audiovisual</span>
         <span class="case-tag" style="border-color:rgba(10,10,10,0.3);color:rgba(10,10,10,0.6);">Campanhas</span>
         <span class="case-tag" style="border-color:rgba(10,10,10,0.3);color:rgba(10,10,10,0.6);">Mkt de Influência</span>
+      </div>
+    </div>
+    <!-- Case 3 reveal -->
+    <div class="case-reveal" id="caseReveal3">
+      <div class="reveal-col"><div class="reveal-col-inner" id="col3a"><img src="computador_case3.png" style="position:absolute;top:0;left:-0vw;width:100vw;height:100%;object-fit:cover;object-position:top left;" alt=""/></div></div>
+      <div class="reveal-col"><div class="reveal-col-inner" id="col3b"><img src="computador_case3.png" style="position:absolute;top:0;left:-18vw;width:100vw;height:100%;object-fit:cover;object-position:top left;" alt=""/></div></div>
+      <div class="reveal-col"><div class="reveal-col-inner" id="col3c"><img src="computador_case3.png" style="position:absolute;top:0;left:-46vw;width:100vw;height:100%;object-fit:cover;object-position:top left;" alt=""/></div></div>
+      <div class="reveal-col"><div class="reveal-col-inner" id="col3d"><img src="computador_case3.png" style="position:absolute;top:0;left:-68vw;width:100vw;height:100%;object-fit:cover;object-position:top left;" alt=""/></div></div>
+      <div class="reveal-col"><div class="reveal-col-inner" id="col3e"><img src="computador_case3.png" style="position:absolute;top:0;left:-84vw;width:100vw;height:100%;object-fit:cover;object-position:top left;" alt=""/></div></div>
+    </div>
+    <!-- Case 3 info overlay -->
+    <div class="case-info-overlay hidden" id="case3info" style="bottom: 120px;">
+      <div class="case-title">Web Design &amp;<br>Estratégia</div>
+      <div class="case-tags">
+        <span class="case-tag">Web Design</span>
+        <span class="case-tag">Branding</span>
       </div>
     </div>
     <div class="ticker-wrap" id="ticker">
@@ -2219,6 +2236,7 @@ setInterval(()=>{
 const fold3     = document.getElementById('fold3');
 const cols      = [0,1,2,3,4].map(i=>document.getElementById('col'+i));
 const case1Cols = [0,1,2,3,4].map(i=>document.getElementById('case1col'+i));
+const case3Cols = ['a','b','c','d','e'].map(i=>document.getElementById('col3'+i));
 const case1BaseImg = document.querySelector('.case-base-img img');
 const caseOffsets = [0, 18, 46, 68, 84];
 
@@ -2234,10 +2252,12 @@ case1Cols.forEach((inner, i) => {
 
 const case1info = document.getElementById('case1info');
 const case2info = document.getElementById('case2info');
+const case3info = document.getElementById('case3info');
 const ticker    = document.getElementById('ticker');
 const caseNum   = document.getElementById('caseNum');
 const mobileCase1 = document.getElementById('mobileCase1');
 const mobileCase2 = document.getElementById('mobileCase2');
+const mobileCase3 = document.getElementById('mobileCase3');
 const delays    = [0, 0.08, 0.04, 0.12, 0.06];
 
 /* ── Services scroll progression ── */
@@ -2314,7 +2334,17 @@ function onScroll(){
 
   /* Case 02 entrance: same column effect, but only after Case 01 has entered */
   cols.forEach((col,i)=>{
-    const start = 0.42 + delays[i] * 0.25;
+    const start = 0.28 + delays[i] * 0.18;
+    const end = 0.68;
+    const p = Math.max(0, Math.min(1, (p3 - start) / (end - start)));
+    const e = 1 - Math.pow(1-p, 3);
+    col.style.transform = `translateY(${(1-e)*100}%)`;
+  });
+
+  /* Case 03 entrance: after Case 02 */
+  case3Cols.forEach((col,i)=>{
+    if (!col) return;
+    const start = 0.58 + delays[i] * 0.18;
     const end = 1;
     const p = Math.max(0, Math.min(1, (p3 - start) / (end - start)));
     const e = 1 - Math.pow(1-p, 3);
@@ -2322,20 +2352,19 @@ function onScroll(){
   });
 
   const isMobileCases = window.matchMedia('(max-width: 900px)').matches;
-  const showCase1 = isMobileCases ? (p3 > 0.03 && p3 < 0.80) : (p3 > 0.12 && p3 <= 0.58);
-  const showCase2 = isMobileCases ? (p3 >= 0.88) : (p3 > 0.58);
+  const showCase1 = isMobileCases ? (p3 > 0.03 && p3 < 0.55) : (p3 > 0.12 && p3 <= 0.40);
+  const showCase2 = isMobileCases ? (p3 >= 0.55 && p3 < 0.80) : (p3 > 0.40 && p3 <= 0.70);
+  const showCase3 = isMobileCases ? (p3 >= 0.80) : (p3 > 0.70);
 
-  if (mobileCase1 && mobileCase2) {
+  if (mobileCase1 && mobileCase2 && mobileCase3) {
     if (isMobileCases) {
-      /*
-        No mobile, os dois slides precisam permanecer ativos,
-        porque o recorte é controlado por clip-path.
-      */
       mobileCase1.classList.add('active');
       mobileCase2.classList.add('active');
+      mobileCase3.classList.add('active');
     } else {
-      mobileCase1.classList.toggle('active', !showCase2);
+      mobileCase1.classList.toggle('active', !showCase2 && !showCase3);
       mobileCase2.classList.toggle('active', showCase2);
+      mobileCase3.classList.toggle('active', showCase3);
     }
   }
 
@@ -2343,8 +2372,10 @@ function onScroll(){
   case1info.classList.toggle('hidden',  !showCase1);
   case2info.classList.toggle('visible', showCase2);
   case2info.classList.toggle('hidden',  !showCase2);
+  case3info.classList.toggle('visible', showCase3);
+  case3info.classList.toggle('hidden',  !showCase3);
   ticker.classList.toggle('visible',  p3 > 0.85);
-  caseNum.textContent = (isMobileCases ? p3 >= 0.80 : p3 > 0.58) ? '02' : '01';
+  caseNum.textContent = showCase3 ? '03' : showCase2 ? '02' : '01';
 
   /* ── Services scroll progression ── */
   if (fold4 && items.length && panels.length) {
