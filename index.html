@@ -3676,6 +3676,15 @@ menuLinks.forEach(link=>{
       return;
     }
 
+    // Limpa os inline styles forçados quando volta a scrollar
+    ['case1info','case2info','case3info'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.removeProperty('opacity');
+        el.style.removeProperty('visibility');
+      }
+    });
+
     const case2Complete = p >= 0.68;
     const case3Complete = p >= 0.96;
 
