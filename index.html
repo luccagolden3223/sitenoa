@@ -563,7 +563,7 @@ nav {
 
 @media (max-width: 900px) {
   #fold3 {
-    height: 260vh;
+    height: 380vh;
     margin-top: -45vh;
   }
 
@@ -1232,7 +1232,7 @@ body.preload-active {
   <div class="cases-sticky">
     <img class="mobile-case-img mobile-case-img-1 active" id="mobileCase1" src="mobile_nk.png" alt="Case 01 NK mobile"/>
     <img class="mobile-case-img mobile-case-img-2" id="mobileCase2" src="banner_kk_mobile3.png" alt="Case 02 Koffee Klup mobile"/>
-    <img class="mobile-case-img mobile-case-img-3" id="mobileCase3" src="computador_case3.png" alt="Case 03 Messano mobile"/>
+    <img class="mobile-case-img mobile-case-img-3" id="mobileCase3" src="computador_mobile.png" alt="Case 03 Messano mobile"/>
 
     <div class="fold3-counter">
       <span class="current" id="caseNum">01</span>
@@ -3099,8 +3099,8 @@ menuLinks.forEach(link=>{
 @media (max-width: 900px) {
   #fold3 {
     position: relative !important;
-    height: 300vh !important;
-    height: 300dvh !important;
+    height: 420vh !important;
+    height: 420dvh !important;
     background: #030303 !important;
     z-index: 18 !important;
   }
@@ -3146,6 +3146,12 @@ menuLinks.forEach(link=>{
 
   #mobileCase2 {
     z-index: 5 !important;
+    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    -webkit-clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+  }
+
+  #mobileCase3 {
+    z-index: 6 !important;
     clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
     -webkit-clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
   }
@@ -3264,9 +3270,10 @@ menuLinks.forEach(link=>{
     });
   }
 
-  function setInfo(showCase1, showCase2) {
+  function setInfo(showCase1, showCase2, showCase3) {
     const case1info = document.getElementById('case1info');
     const case2info = document.getElementById('case2info');
+    const case3info = document.getElementById('case3info');
 
     if (case1info) {
       case1info.classList.toggle('visible', showCase1);
@@ -3276,6 +3283,11 @@ menuLinks.forEach(link=>{
     if (case2info) {
       case2info.classList.toggle('visible', showCase2);
       case2info.classList.toggle('hidden', !showCase2);
+    }
+
+    if (case3info) {
+      case3info.classList.toggle('visible', showCase3);
+      case3info.classList.toggle('hidden', !showCase3);
     }
   }
 
@@ -3287,6 +3299,7 @@ menuLinks.forEach(link=>{
     const fold3 = document.getElementById('fold3');
     const case1 = document.getElementById('mobileCase1');
     const case2 = document.getElementById('mobileCase2');
+    const case3 = document.getElementById('mobileCase3');
 
     if (!fold3 || !case1 || !case2) return;
 
@@ -3294,19 +3307,13 @@ menuLinks.forEach(link=>{
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
-    /*
-      O Case 01 estava reto porque completava cedo demais.
-      Agora ele usa a mesma lógica do Case 02, mas com entrada mais longa:
-      0.10 → 0.58: Case 01 sobe em colunas.
-      0.58 → 0.66: respiro.
-      0.66 → 0.96: Case 02 entra por cima em colunas.
-    */
-    /* Case 01 só completa a tela inteira em 80% do scroll da seção */
-    const p1 = columnProgresses(p, 0.00, 0.80, true);
-    const p2 = columnProgressesSoftCase2(p, 0.62, 0.92);
+    const p1 = columnProgresses(p, 0.00, 0.55, true);
+    const p2 = columnProgressesSoftCase2(p, 0.42, 0.68);
+    const p3c = columnProgressesSoftCase2(p, 0.72, 0.96);
 
     const clip1 = steppedPolygon(p1);
     const clip2 = steppedPolygon(p2);
+    const clip3 = steppedPolygon(p3c);
 
     case1.style.clipPath = clip1;
     case1.style.webkitClipPath = clip1;
@@ -3314,11 +3321,18 @@ menuLinks.forEach(link=>{
     case2.style.clipPath = clip2;
     case2.style.webkitClipPath = clip2;
 
-    const case1Started = p > 0.03;
-    const case2Started = p >= 0.62;
-    const case2Complete = p >= 0.92;
+    if (case3) {
+      case3.style.clipPath = clip3;
+      case3.style.webkitClipPath = clip3;
+    }
 
-    setInfo(case1Started && !case2Started, case2Complete);
+    const case1Started = p > 0.03;
+    const case2Started = p >= 0.42;
+    const case3Started = p >= 0.72;
+    const case2Complete = p >= 0.68;
+    const case3Complete = p >= 0.96;
+
+    setInfo(case1Started && !case2Started, case2Complete && !case3Started, case3Complete);
   }
 
   function requestUpdate() {
