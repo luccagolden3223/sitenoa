@@ -1800,6 +1800,11 @@ body.preload-active {
   white-space: nowrap;
   display: inline-block;
 }
+.mobile-only-br { display: none; }
+@media (max-width: 900px) {
+  .mobile-only-br { display: block; }
+  .tm-nowrap { white-space: normal; }
+}
 
 
 @media (max-width: 900px) {
@@ -1850,7 +1855,7 @@ body.preload-active {
       <span class="tm-word-wrap"><span class="tm-word" id="tmw2" data-text="PROJECTS"><span class="tm-fill"></span>PROJECTS</span></span>
       <p class="tm-sub" id="tmSub">
       Comunicação <strong>feita sob medida</strong> para atingir os objetivos do seu negócio.<br><br>
-      Nossa <strong>equipe personalizada</strong> é escalada de acordo com as <span class="tm-nowrap">expertises necessárias<br>para cada projeto.</span>
+      Nossa <strong>equipe personalizada</strong> é escalada de acordo com as <span class="tm-nowrap">expertises necessárias<br class="mobile-only-br">para cada projeto.</span>
     </p>
     </div>
   </div>
