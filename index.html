@@ -3349,7 +3349,8 @@ menuLinks.forEach(link=>{
       }
     }
 
-    const case1Started = p > 0.03;
+    const fold3InView = rect.top < window.innerHeight && rect.bottom > 0;
+    const case1Started = fold3InView && p > 0.03;
     const case2Started = p >= 0.42;
     const case3Started = p >= 0.72;
     const case2Complete = p >= 0.68;
@@ -3547,10 +3548,11 @@ menuLinks.forEach(link=>{
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
-    const case2Entering = p >= 0.42;
-    const case2Complete = p >= 0.68;
-    const case3Entering = p >= 0.72;
-    const case3Complete = p >= 0.96;
+    const fold3InView = rect.top < window.innerHeight && rect.bottom > 0;
+    const case2Entering = fold3InView && p >= 0.42;
+    const case2Complete = fold3InView && p >= 0.68;
+    const case3Entering = fold3InView && p >= 0.72;
+    const case3Complete = fold3InView && p >= 0.96;
 
     // Case 2 visibility
     if (!case2Entering) {
