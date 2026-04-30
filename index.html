@@ -3662,6 +3662,11 @@ menuLinks.forEach(link=>{
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
+    if (rect.top > 0) {
+      case2.classList.remove('case2-complete');
+      return;
+    }
+
     const case2Complete = p >= 0.68;
     const case3Complete = p >= 0.96;
 
@@ -3709,6 +3714,16 @@ menuLinks.forEach(link=>{
     const rect = fold3.getBoundingClientRect();
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
+
+    if (rect.top > 0) {
+      case2.style.setProperty('visibility', 'hidden', 'important');
+      case2.style.setProperty('opacity', '0', 'important');
+      if (case3) {
+        case3.style.setProperty('visibility', 'hidden', 'important');
+        case3.style.setProperty('opacity', '0', 'important');
+      }
+      return;
+    }
 
     if (p >= 0.42) {
       case2.style.setProperty('visibility', 'visible', 'important');
