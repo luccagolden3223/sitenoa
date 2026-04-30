@@ -66,7 +66,9 @@ nav {
   align-items: center;
   mix-blend-mode: difference;
 }
-.nav-logo {
+@media (max-width: 900px) {
+  #cursor, #cursor-ring { display: none !important; }
+}
   font-family: 'DM Serif Text', serif;
   font-size: 18px; font-weight: 400;
   color: var(--white); letter-spacing: -0.5px;
