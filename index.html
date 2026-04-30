@@ -3349,7 +3349,7 @@ menuLinks.forEach(link=>{
       }
     }
 
-    const fold3InView = rect.top < window.innerHeight && rect.bottom > 0;
+    const fold3InView = rect.top <= 0 && rect.bottom > 0;
     const case1Started = fold3InView && p > 0.03;
     const case2Started = p >= 0.42;
     const case3Started = p >= 0.72;
@@ -3548,7 +3548,7 @@ menuLinks.forEach(link=>{
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
-    const fold3InView = rect.top < window.innerHeight && rect.bottom > 0;
+    const fold3InView = rect.top <= 0 && rect.bottom > 0;
     const case2Entering = fold3InView && p >= 0.42;
     const case2Complete = fold3InView && p >= 0.68;
     const case3Entering = fold3InView && p >= 0.72;
