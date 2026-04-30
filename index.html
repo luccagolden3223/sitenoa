@@ -3326,6 +3326,15 @@ menuLinks.forEach(link=>{
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
+    // Se fold3 ainda não foi scrollado (usuário voltou ao topo), esconde todos os títulos
+    if (rect.top > 0) {
+      ['case1info','case2info','case3info'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('visible'); el.classList.add('hidden'); }
+      });
+      return;
+    }
+
     const p1 = columnProgresses(p, 0.00, 0.55, true);
     const p2 = columnProgressesSoftCase2(p, 0.42, 0.68);
     const p3c = columnProgressesSoftCase2(p, 0.72, 0.96);
@@ -3547,6 +3556,14 @@ menuLinks.forEach(link=>{
     const rect = fold3.getBoundingClientRect();
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
+
+    // Reset quando volta ao topo
+    if (rect.top > 0) {
+      [case1info, case2info, case3info].forEach(el => {
+        if (el) { el.classList.remove('visible'); el.classList.add('hidden'); }
+      });
+      return;
+    }
 
     const fold3InView = rect.top <= 0 && rect.bottom > 0;
     const case2Entering = fold3InView && p >= 0.42;
