@@ -3513,7 +3513,9 @@ menuLinks.forEach(link=>{
 
     const fold3 = document.getElementById('fold3');
     const case2 = document.getElementById('mobileCase2');
+    const case3 = document.getElementById('mobileCase3');
     const case2info = document.getElementById('case2info');
+    const case3info = document.getElementById('case3info');
     const case1info = document.getElementById('case1info');
 
     if (!fold3 || !case2) return;
@@ -3522,51 +3524,50 @@ menuLinks.forEach(link=>{
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
-    /*
-      Timings do MobileCase2:
-      0.62: começa a entrar em colunas
-      0.92: está 100% preenchido
-      0.92 até o final: fica completo e estático, com título aparecendo
-    */
-    const case2Entering = p >= 0.62;
-    const case2Complete = p >= 0.92;
+    const case2Entering = p >= 0.42;
+    const case2Complete = p >= 0.68;
+    const case3Entering = p >= 0.72;
+    const case3Complete = p >= 0.96;
 
+    // Case 2 visibility
     if (!case2Entering) {
       setImportant(case2, 'visibility', 'hidden');
       setImportant(case2, 'opacity', '0');
+    } else {
+      setImportant(case2, 'visibility', 'visible');
+      setImportant(case2, 'opacity', '1');
+    }
 
-      if (case2info) {
-        case2info.classList.remove('visible');
-        case2info.classList.add('hidden');
+    // Case 3 visibility
+    if (case3) {
+      if (!case3Entering) {
+        setImportant(case3, 'visibility', 'hidden');
+        setImportant(case3, 'opacity', '0');
+      } else {
+        setImportant(case3, 'visibility', 'visible');
+        setImportant(case3, 'opacity', '1');
       }
-      return;
     }
 
-    setImportant(case2, 'visibility', 'visible');
-    setImportant(case2, 'opacity', '1');
-
-    /*
-      Enquanto o Case2 está entrando, o título dele ainda fica oculto.
-      Depois de 100% completo, o título aparece e permanece.
-      O título do Case1 é forçado a sumir a partir da entrada do Case2.
-    */
+    // Info overlays
     if (case1info) {
-      case1info.classList.remove('visible');
-      case1info.classList.add('hidden');
+      case1info.classList.toggle('visible', !case2Entering);
+      case1info.classList.toggle('hidden', case2Entering);
     }
-
     if (case2info) {
-      case2info.classList.toggle('visible', case2Complete);
-      case2info.classList.toggle('hidden', !case2Complete);
+      case2info.classList.toggle('visible', case2Complete && !case3Entering);
+      case2info.classList.toggle('hidden', !(case2Complete && !case3Entering));
+    }
+    if (case3info) {
+      case3info.classList.toggle('visible', case3Complete);
+      case3info.classList.toggle('hidden', !case3Complete);
     }
   }
 
   updateMobileCase2Visibility();
-
   window.addEventListener('scroll', function(){
     requestAnimationFrame(updateMobileCase2Visibility);
   }, { passive: true });
-
   window.addEventListener('resize', updateMobileCase2Visibility);
 })();
 </script>
@@ -3608,7 +3609,9 @@ menuLinks.forEach(link=>{
 
     const fold3 = document.getElementById('fold3');
     const case2 = document.getElementById('mobileCase2');
+    const case3 = document.getElementById('mobileCase3');
     const case2info = document.getElementById('case2info');
+    const case3info = document.getElementById('case3info');
     const case1info = document.getElementById('case1info');
 
     if (!fold3 || !case2) return;
@@ -3617,41 +3620,32 @@ menuLinks.forEach(link=>{
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
-    /*
-      0.92 é o ponto em que o MobileCase2 já está 100% preenchido.
-      A partir daqui, o clip-path é forçado para tela cheia e não muda mais.
-    */
-    const complete = p >= 0.92;
+    const case2Complete = p >= 0.68;
+    const case3Complete = p >= 0.96;
 
-    case2.classList.toggle('case2-complete', complete);
+    case2.classList.toggle('case2-complete', case2Complete);
 
-    if (complete) {
+    if (case2Complete) {
       setImportant(case2, 'visibility', 'visible');
       setImportant(case2, 'opacity', '1');
       setImportant(case2, 'clip-path', 'inset(0 0 0 0)');
       setImportant(case2, '-webkit-clip-path', 'inset(0 0 0 0)');
       setImportant(case2, 'transform', 'none');
+    }
 
-      if (case1info) {
-        case1info.classList.remove('visible');
-        case1info.classList.add('hidden');
-      }
-
-      if (case2info) {
-        case2info.classList.add('visible', 'case2-complete-title');
-        case2info.classList.remove('hidden');
-      }
-    } else if (case2info) {
-      case2info.classList.remove('case2-complete-title');
+    if (case3 && case3Complete) {
+      setImportant(case3, 'visibility', 'visible');
+      setImportant(case3, 'opacity', '1');
+      setImportant(case3, 'clip-path', 'inset(0 0 0 0)');
+      setImportant(case3, '-webkit-clip-path', 'inset(0 0 0 0)');
+      setImportant(case3, 'transform', 'none');
     }
   }
 
   freezeMobileCase2AfterComplete();
-
   window.addEventListener('scroll', function(){
     requestAnimationFrame(freezeMobileCase2AfterComplete);
   }, { passive: true });
-
   window.addEventListener('resize', freezeMobileCase2AfterComplete);
 })();
 </script>
@@ -3667,19 +3661,20 @@ menuLinks.forEach(link=>{
 
     const fold3 = document.getElementById('fold3');
     const case2 = document.getElementById('mobileCase2');
+    const case3 = document.getElementById('mobileCase3');
     if (!fold3 || !case2) return;
 
     const rect = fold3.getBoundingClientRect();
     const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
     const p = clamp(-rect.top / total, 0, 1);
 
-    /*
-      MobileCase2 começa a existir visualmente aos 62%,
-      mas só congela/mostra título aos 92%.
-    */
-    if (p >= 0.62) {
+    if (p >= 0.42) {
       case2.style.setProperty('visibility', 'visible', 'important');
       case2.style.setProperty('opacity', '1', 'important');
+    }
+    if (case3 && p >= 0.72) {
+      case3.style.setProperty('visibility', 'visible', 'important');
+      case3.style.setProperty('opacity', '1', 'important');
     }
   }
 
