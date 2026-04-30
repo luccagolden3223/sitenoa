@@ -2428,6 +2428,14 @@ function onScroll(){
 
   /* subtitle only after scroll is essentially done */
   tmSub.classList.toggle('visible', p5 > 0.88);
+
+  /* menu button: inverte cor no fold5 (fundo pink) */
+  const menuBtn = document.getElementById('menuOpenBtn');
+  if (menuBtn) {
+    const inTaylorMade = r5.top <= 60 && r5.bottom >= 0;
+    menuBtn.style.background = inTaylorMade ? '#0A0A0A' : '';
+    menuBtn.style.color = inTaylorMade ? '#F0EDE8' : '';
+  }
   /* ── Contact title reveal ── */
   const r6 = fold6.getBoundingClientRect();
   const contactStart = window.innerHeight * 0.70;
