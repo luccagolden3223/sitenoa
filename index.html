@@ -3591,9 +3591,14 @@ menuLinks.forEach(link=>{
     }
 
     // Info overlays
+    // Case 01 só aparece depois que a própria revelação dele passou do ponto de entrada.
+    // Ao voltar o scroll para o início, ele faz fade out novamente.
+    const case1Entering = fold3InView && p > 0.35;
+
     if (case1info) {
-      case1info.classList.toggle('visible', !case2Entering);
-      case1info.classList.toggle('hidden', case2Entering);
+      const showCase1 = case1Entering && !case2Entering;
+      case1info.classList.toggle('visible', showCase1);
+      case1info.classList.toggle('hidden', !showCase1);
     }
     if (case2info) {
       case2info.classList.toggle('visible', case2Entering && !case3Entering);
@@ -5041,6 +5046,69 @@ menuLinks.forEach(link=>{
   }
 }
 </style>
+
+
+<script id="mobile-case1-title-fadeout-fix">
+(function(){
+  const mq = window.matchMedia('(max-width: 900px)');
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+  let ticking = false;
+
+  function updateCase1TitleState() {
+    ticking = false;
+    if (!mq.matches) return;
+
+    const fold3 = document.getElementById('fold3');
+    const case1info = document.getElementById('case1info');
+    const case2info = document.getElementById('case2info');
+    const case3info = document.getElementById('case3info');
+
+    if (!fold3 || !case1info) return;
+
+    const rect = fold3.getBoundingClientRect();
+    const total = Math.max(1, fold3.offsetHeight - window.innerHeight);
+    const p = clamp(-rect.top / total, 0, 1);
+    const fold3InView = rect.top <= 0 && rect.bottom > 0;
+
+    const case1Entering = fold3InView && p > 0.35;
+    const case2Entering = fold3InView && p >= 0.42;
+    const case3Entering = fold3InView && p >= 0.72;
+
+    const showCase1 = case1Entering && !case2Entering;
+    const showCase2 = case2Entering && !case3Entering;
+    const showCase3 = case3Entering;
+
+    [case1info, case2info, case3info].forEach(el => {
+      if (!el) return;
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('visibility');
+    });
+
+    case1info.classList.toggle('visible', showCase1);
+    case1info.classList.toggle('hidden', !showCase1);
+
+    if (case2info) {
+      case2info.classList.toggle('visible', showCase2);
+      case2info.classList.toggle('hidden', !showCase2);
+    }
+
+    if (case3info) {
+      case3info.classList.toggle('visible', showCase3);
+      case3info.classList.toggle('hidden', !showCase3);
+    }
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateCase1TitleState);
+  }
+
+  updateCase1TitleState();
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate);
+})();
+</script>
 
 </body>
 </html>
