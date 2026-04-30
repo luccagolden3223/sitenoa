@@ -3338,7 +3338,7 @@ menuLinks.forEach(link=>{
     const case2Complete = p >= 0.68;
     const case3Complete = p >= 0.96;
 
-    setInfo(case1Started && !case2Started, case2Complete && !case3Started, case3Complete);
+    setInfo(case1Started && !case2Started, case2Started && !case3Started, case3Started);
   }
 
   function requestUpdate() {
@@ -3561,12 +3561,12 @@ menuLinks.forEach(link=>{
       case1info.classList.toggle('hidden', case2Entering);
     }
     if (case2info) {
-      case2info.classList.toggle('visible', case2Complete && !case3Entering);
-      case2info.classList.toggle('hidden', !(case2Complete && !case3Entering));
+      case2info.classList.toggle('visible', case2Entering && !case3Entering);
+      case2info.classList.toggle('hidden', !(case2Entering && !case3Entering));
     }
     if (case3info) {
-      case3info.classList.toggle('visible', case3Complete);
-      case3info.classList.toggle('hidden', !case3Complete);
+      case3info.classList.toggle('visible', case3Entering);
+      case3info.classList.toggle('hidden', !case3Entering);
     }
   }
 
