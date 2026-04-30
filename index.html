@@ -3676,10 +3676,10 @@ menuLinks.forEach(link=>{
       return;
     }
 
-    // Limpa os inline styles forçados quando volta a scrollar
+    // fold3 está sendo scrollado — limpa o bloqueio e deixa o JS tomar conta
     ['case1info','case2info','case3info'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) {
+      if (el && el.style.getPropertyPriority('opacity') === 'important') {
         el.style.removeProperty('opacity');
         el.style.removeProperty('visibility');
       }
