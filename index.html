@@ -3359,14 +3359,13 @@ menuLinks.forEach(link=>{
     }
 
     const fold3InView = rect.top <= 0 && rect.bottom > 0;
-    const case1Started = fold3InView && p > 0.03;
+    const case1Started = fold3InView && p > 0.35;
     const case2Started = p >= 0.42;
     const case3Started = p >= 0.72;
     const case2Complete = p >= 0.68;
     const case3Complete = p >= 0.96;
 
-    setInfo(case1Started && !case2Started, case2Started && !case3Started, case3Started);
-  }
+    setInfo(case1Started && !case2Started, case2Started && !case3Started, case3Started);  }
 
   function requestUpdate() {
     if (ticking) return;
