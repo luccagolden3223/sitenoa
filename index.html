@@ -3151,9 +3151,11 @@ menuLinks.forEach(link=>{
   }
 
   #mobileCase3 {
-    z-index: 6 !important;
+    z-index: 6;
     clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
     -webkit-clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    visibility: hidden;
+    opacity: 0;
   }
 
   .case-info-overlay {
@@ -3324,6 +3326,10 @@ menuLinks.forEach(link=>{
     if (case3) {
       case3.style.clipPath = clip3;
       case3.style.webkitClipPath = clip3;
+      if (p >= 0.72) {
+        case3.style.setProperty('visibility', 'visible', 'important');
+        case3.style.setProperty('opacity', '1', 'important');
+      }
     }
 
     const case1Started = p > 0.03;
