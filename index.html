@@ -3664,6 +3664,15 @@ menuLinks.forEach(link=>{
 
     if (rect.top > 0) {
       case2.classList.remove('case2-complete');
+      ['case1info','case2info','case3info'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.remove('visible');
+          el.classList.add('hidden');
+          el.style.setProperty('opacity', '0', 'important');
+          el.style.setProperty('visibility', 'hidden', 'important');
+        }
+      });
       return;
     }
 
